@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const express = require('express');
+const fs = require('fs');
 const app = express();
 // Create an S3 client using the temporary credentials obtained from the assumed role
 const s3 = new AWS.S3();
@@ -8,14 +9,20 @@ const s3 = new AWS.S3();
 const bucketName = 'demoooooooosdssdf';
 const objectKey = 'demo';
 
-// Specify the data you want to upload to S3
-const dataToUpload = 'Hello, S3!';
+
+// Specify the path to the image file you want to upload
+const filePath = './error_hostel.png';
+
+// Read the image file as a binary buffer
+const fileContent = fs.readFileSync(filePath);
+
 
 // Set up the S3 upload parameters
 const params = {
     Bucket: bucketName,
     Key: objectKey,
-    Body: dataToUpload,
+    Body: fileContent,
+    ContentType: 'image/png',
 };
 app.listen(8080, () => {
     s3.upload(params, (err, data) => {
